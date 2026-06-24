@@ -1,0 +1,17 @@
+name: compile code before PR
+
+on:
+  pull_request:
+
+jobs:
+  run-command:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run shell command
+        run: |
+          echo "Hello from a PR"
+          gcc nob.c -o nob
+          ./nob
