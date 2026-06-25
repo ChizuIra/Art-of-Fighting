@@ -83,7 +83,7 @@ void add_input(Ring *ring,Input input){
 }
 
 
-const Input noInput = {.direction = NEUTRE,.coup=NONE};
+const Input NO_INPUT= {.direction = NEUTRE,.coup=NONE};
 
 Input get_pressed_input(char pressed){
     switch(pressed){
@@ -114,7 +114,7 @@ Input get_pressed_input(char pressed){
         case 'r':
             return create_input(NEUTRE,GPIED);
         default:
-            return noInput;
+            return NO_INPUT;
     }
 
 }
@@ -190,7 +190,7 @@ int interpretator(Ring ring,CoupSpecial coupspecial){
                 return 1;
             }
             j--;
-        }else if(compare_input(currentInput, noInput)&& i<diff-1){
+        }else if(compare_input(currentInput, NO_INPUT)&& i<diff-1){
             continue;
         }else{
             break;
