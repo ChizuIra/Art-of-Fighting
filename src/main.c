@@ -202,7 +202,6 @@ int interpretator(Ring ring,CoupSpecial coupspecial){
 
 
 int  find_coup_special(Ring ring,Moveset moveset){
-    size_t diff=get_diff(ring);
     int finded = 0;
     for(int i = 0;i < moveset.size;i++){
         finded = interpretator(ring,moveset.array[i]);
