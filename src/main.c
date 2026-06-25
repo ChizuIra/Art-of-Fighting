@@ -120,7 +120,7 @@ Input get_pressed_input(char pressed){
 }
 
 
-// crée les coupspecial
+// crée les CoupSpecial
 const CoupSpecial hadoken = {
     .array = {
         {BAS,NONE},
@@ -180,17 +180,17 @@ int compare_input(Input i1,Input i2){
     return i1.coup == i2.coup && i1.direction == i2.direction;
 }
 
-int interpretator(Ring ring,CoupSpecial coupspecial){
-    int j = coupspecial.size-1;
+int interpretator(Ring ring,CoupSpecial coup_special){
+    int j = coup_special.size-1;
     size_t diff=get_diff(ring);
     for(int i=diff-1;i>=0;i--){
-        Input currentInput = get_input(ring,i);
-        if(compare_input(currentInput,coupspecial.array[j])){
+        Input current_input = get_input(ring,i);
+        if(compare_input(current_input,coup_special.array[j])){
             if(j==0){
                 return 1;
             }
             j--;
-        }else if(compare_input(currentInput, NO_INPUT)&& i<diff-1){
+        }else if(compare_input(current_input, NO_INPUT)&& i<diff-1){
             continue;
         }else{
             break;
@@ -220,9 +220,9 @@ void main(){
         if(pressed == '\n'){continue;}
         Input input = get_pressed_input(pressed);
         add_input(&ring,input);
-        int idcoupspecial = find_coup_special(ring,ryu);
-        if(idcoupspecial > -1){
-            printf("%s\n",ryu.array[idcoupspecial].name);
+        int id_coup_special = find_coup_special(ring,ryu);
+        if(id_coup_special > -1){
+            printf("%s\n",ryu.array[id_coup_special].name);
         }
     }
 }
