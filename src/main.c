@@ -5,13 +5,6 @@
 #include <stddef.h>
 #include <string.h>
 
-/*
- *typedef union {
-    struct { int x, y; };
-    int c[2];
-} V2i;
- *
- */
 
 
 
@@ -269,7 +262,6 @@ const V2i SPAWN_COORDS_J2 = {
 int main(){
     
     Player player1 = create_player("J1",RYU,SPAWN_COORDS_J1);
-   // Ring ring = create_ring();
     while(1){
         char pressed = getchar(); 
         if(pressed == '\n'){continue;}
