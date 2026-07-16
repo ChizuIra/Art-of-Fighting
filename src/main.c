@@ -272,5 +272,4 @@ int main(){
             printf("%s\n",player1.character.moveset.array[id_coup_special].name);
         }
     }
-    return 0;
 }
