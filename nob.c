@@ -29,7 +29,7 @@ int main(int argc, char **argv){
         nob_cmd_append(&cmd, "-Wno-unused-function", "-x", "c-header");
         nob_cc_output(&cmd, BUILD_FOLDER "la.h.gch");
         nob_cc_inputs(&cmd, LIB_FOLDER "la.h");
-        if (!nob_cmd_run_sync_and_reset(&cmd)) return 1;
+        if (!nob_cmd_run(&cmd)) return 1;
     }
 
     // nob.h ships with a bunch of nob_cc_* macros that try abstract away the specific compiler.
