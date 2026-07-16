@@ -157,7 +157,7 @@ Input get_pressed_input(char pressed){
 
 // crée les CoupSpecial
 // CHARACTER RYU
-const CoupSpecial hadoken = {
+const CoupSpecial HADOKEN = {
     .array = {
         {BAS,NONE},
         {BASD,NONE},
@@ -168,7 +168,7 @@ const CoupSpecial hadoken = {
     .name = "Haadoken!" 
 };
 
-const CoupSpecial shoryuken = {
+const CoupSpecial SHORYUKEN = {
     .array = {
         {DROIT,NONE},
         {BAS,NONE},
@@ -180,7 +180,7 @@ const CoupSpecial shoryuken = {
     .name = "Shooryuken!" 
 };
 
-const CoupSpecial tatsumaki= {
+const CoupSpecial TATSUMAKI= {
     .array = {
         {BAS,NONE},
         {BASG,NONE},
@@ -193,20 +193,20 @@ const CoupSpecial tatsumaki= {
 // CHARACTER ..
 
 // crée les Moveset
-const Moveset ryu_moveset = {
+const Moveset RYU_MOVESET = {
     .array = {
-        hadoken,
-        shoryuken,
-        tatsumaki
+        HADOKEN,
+        SHORYUKEN,
+        TATSUMAKI
     },
     .size = 3
 }; 
 
 // crée les Character
-const Character ryu = {
+const Character RYU = {
     .name = "Ryu",
     .max_health = 1000,
-    .moveset = ryu_moveset,
+    .moveset = RYU_MOVESET,
     };
 
 Input get_input(Ring ring,size_t i){
@@ -268,7 +268,7 @@ const V2i SPAWN_COORDS_J2 = {
 };
 int main(){
     
-    Player player1 = create_player("J1",ryu,SPAWN_COORDS_J1);
+    Player player1 = create_player("J1",RYU,SPAWN_COORDS_J1);
    // Ring ring = create_ring();
     while(1){
         char pressed = getchar(); 
