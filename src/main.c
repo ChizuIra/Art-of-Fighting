@@ -74,7 +74,7 @@ Ring create_ring(){
     return ring;
 }
 
-Player create_player(char* name,Character selected_character,V2i spawn_coords){
+Player create_player(const char* name,Character selected_character,V2i spawn_coords){
     Player player;
     strcpy(player.name,name);
     player.ring = create_ring();
