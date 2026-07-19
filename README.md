@@ -1,20 +1,4 @@
-genre la en gros on a :
-
-récuperer la touche appuyer
-on la transforme en Input(direction,coup)
-on stock l'Input dans le Buffer
-
 Roadmap : 
-
-### court terme:
-- convention de code
-- cicd
-- build system
-
-
-- Struct character : nom, maxhp ,movespeed, hitboxes ,  moveset
-- Struct Player : nom, character, hp, coord(x,y) , ring 
-
 
 - basic front en terminal 
 raylib : arene + character
