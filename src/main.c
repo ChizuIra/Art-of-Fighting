@@ -1,6 +1,10 @@
+#include "la.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
+#include <string.h>
+
 
 
 
@@ -49,11 +53,36 @@ typedef struct{
 }Ring;
 
 
+typedef struct {
+    char name[256];
+    int max_health;
+    Moveset moveset;
+}Character;
+
+typedef struct {
+    char name[256];
+    Character character;
+    int health;
+    V2i coords;
+    Ring ring;
+}Player;
+
 Ring create_ring(){
     Ring ring;
     ring.start = 0;
     ring.end = 0;
     return ring;
+}
+
+Player create_player(const char* name,Character selected_character,V2i spawn_coords){
+    Player player;
+    strcpy(player.name,name);
+    player.ring = create_ring();
+    player.character = selected_character;
+    player.health = player.character.max_health;
+    player.coords.x = spawn_coords.x;
+    player.coords.y = spawn_coords.y;
+    return player;
 }
 
 size_t get_diff(Ring ring){
@@ -83,7 +112,7 @@ void add_input(Ring *ring,Input input){
 }
 
 
-const Input noInput = {.direction = NEUTRE,.coup=NONE};
+const Input NO_INPUT= {.direction = NEUTRE,.coup=NONE};
 
 Input get_pressed_input(char pressed){
     switch(pressed){
@@ -114,14 +143,14 @@ Input get_pressed_input(char pressed){
         case 'r':
             return create_input(NEUTRE,GPIED);
         default:
-            return noInput;
+            return NO_INPUT;
     }
 
 }
 
-
-// crée les coupspecial
-const CoupSpecial hadoken = {
+// crée les CoupSpecial
+// CHARACTER RYU
+const CoupSpecial HADOKEN = {
     .array = {
         {BAS,NONE},
         {BASD,NONE},
@@ -132,7 +161,7 @@ const CoupSpecial hadoken = {
     .name = "Haadoken!" 
 };
 
-const CoupSpecial shoryuken = {
+const CoupSpecial SHORYUKEN = {
     .array = {
         {DROIT,NONE},
         {BAS,NONE},
@@ -144,7 +173,7 @@ const CoupSpecial shoryuken = {
     .name = "Shooryuken!" 
 };
 
-const CoupSpecial tatsumaki= {
+const CoupSpecial TATSUMAKI= {
     .array = {
         {BAS,NONE},
         {BASG,NONE},
@@ -154,16 +183,24 @@ const CoupSpecial tatsumaki= {
     .size = 4,
     .name = "Tatsumaki Senpukyakui!" 
 };
+// CHARACTER ..
 
-// crée les move set
-const Moveset ryu = {
+// crée les Moveset
+const Moveset RYU_MOVESET = {
     .array = {
-        hadoken,
-        shoryuken,
-        tatsumaki
+        HADOKEN,
+        SHORYUKEN,
+        TATSUMAKI
     },
     .size = 3
 }; 
+
+// crée les Character
+const Character RYU = {
+    .name = "Ryu",
+    .max_health = 1000,
+    .moveset = RYU_MOVESET,
+    };
 
 Input get_input(Ring ring,size_t i){
     return ring.array[i+ring.start%120];
@@ -171,7 +208,7 @@ Input get_input(Ring ring,size_t i){
 
 void print_ring(Ring ring){
     size_t diff=get_diff(ring);
-    for(int i=0;i<diff;i++){
+    for(size_t i=0;i<diff;i++){
         printf("{%d,%d} ",get_input(ring,i).direction,get_input(ring,i).coup);
     }    
     printf("\n");
@@ -180,17 +217,17 @@ int compare_input(Input i1,Input i2){
     return i1.coup == i2.coup && i1.direction == i2.direction;
 }
 
-int interpretator(Ring ring,CoupSpecial coupspecial){
-    int j = coupspecial.size-1;
+int interpretator(Ring ring,CoupSpecial coup_special){
+    int j = coup_special.size-1;
     size_t diff=get_diff(ring);
-    for(int i=diff-1;i>=0;i--){
-        Input currentInput = get_input(ring,i);
-        if(compare_input(currentInput,coupspecial.array[j])){
+    for(size_t i=diff-1;i<diff;i--){
+        Input current_input = get_input(ring,i);
+        if(compare_input(current_input,coup_special.array[j])){
             if(j==0){
                 return 1;
             }
             j--;
-        }else if(compare_input(currentInput, noInput)&& i<diff-1){
+        }else if(compare_input(current_input, NO_INPUT)&& i<diff-1){
             continue;
         }else{
             break;
@@ -202,9 +239,8 @@ int interpretator(Ring ring,CoupSpecial coupspecial){
 
 
 int  find_coup_special(Ring ring,Moveset moveset){
-    size_t diff=get_diff(ring);
     int finded = 0;
-    for(int i = 0;i < moveset.size;i++){
+    for(size_t i = 0;i < moveset.size;i++){
         finded = interpretator(ring,moveset.array[i]);
         if(finded == 1){
             return i;
@@ -214,16 +250,26 @@ int  find_coup_special(Ring ring,Moveset moveset){
 }
 
 
-void main(){
-    Ring ring = create_ring();
+const V2i SPAWN_COORDS_J1 = {
+    .x = 300,
+    .y = 0
+};
+
+const V2i SPAWN_COORDS_J2 = {
+    .x = 500,
+    .y = 0
+};
+int main(){
+    
+    Player player1 = create_player("J1",RYU,SPAWN_COORDS_J1);
     while(1){
         char pressed = getchar(); 
         if(pressed == '\n'){continue;}
         Input input = get_pressed_input(pressed);
-        add_input(&ring,input);
-        int idcoupspecial = find_coup_special(ring,ryu);
-        if(idcoupspecial > -1){
-            printf("%s\n",ryu.array[idcoupspecial].name);
+        add_input(&player1.ring,input);
+        int id_coup_special = find_coup_special(player1.ring,player1.character.moveset);
+        if(id_coup_special > -1){
+            printf("%s\n",player1.character.moveset.array[id_coup_special].name);
         }
     }
 }
