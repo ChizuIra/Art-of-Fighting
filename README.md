@@ -9,11 +9,6 @@ raylib : arene + character
 - Revers Input pour coupspecial
 - Struct terrain : fond ( juste avoir des terrain avec des fond de couleur different atm )
 
-moyen terme:
+
 - gestion hit boxes coup / hitbox  
 ajouter hitbox sur les coup / coupspecial et character
-
- (normalement la c'est jouable en tour par tour)
-
-long terme:
-- 60 fps en  2 joueurs ( aucune idée perso )
