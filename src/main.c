@@ -1,10 +1,10 @@
 #include "la.h"
+#include "../lib/raylib.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
-
 
 
 
@@ -200,7 +200,7 @@ const Character RYU = {
     .name = "Ryu",
     .max_health = 1000,
     .moveset = RYU_MOVESET,
-    };
+};
 
 Input get_input(Ring ring,size_t i){
     return ring.array[i+ring.start%120];
@@ -249,19 +249,36 @@ int  find_coup_special(Ring ring,Moveset moveset){
     return -1;
 }
 
+void draw_player(Player player,Color color){
+    int width = 50;
+    int height = 80;
+    DrawRectangle(player.coords.x-width/2,player.coords.y-height/2,width,height,color);
+    DrawRectangle(player.coords.x,player.coords.y,1,1,WHITE);
+}
+
+
 
 const V2i SPAWN_COORDS_J1 = {
-    .x = 300,
-    .y = 0
+    .x = 400,
+    .y = 410
 };
 
 const V2i SPAWN_COORDS_J2 = {
-    .x = 500,
-    .y = 0
+    .x = 550,
+    .y = 410
 };
+
+
+const int SCREEN_WIDTH = 1000;
+const int SCREEN_HEIGHT = 600;
+
 int main(){
-    
+
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "[AoF]Art of Fighting");
+
     Player player1 = create_player("J1",RYU,SPAWN_COORDS_J1);
+    Player player2 = create_player("J2",RYU,SPAWN_COORDS_J2);
+
     while(1){
         char pressed = getchar(); 
         if(pressed == '\n'){continue;}
@@ -271,5 +288,13 @@ int main(){
         if(id_coup_special > -1){
             printf("%s\n",player1.character.moveset.array[id_coup_special].name);
         }
+
+
+        BeginDrawing();
+        ClearBackground(BLACK);
+        draw_player(player1,BLUE);
+        draw_player(player2,RED);
+        DrawLine(1,450,1000,450, WHITE);
+        EndDrawing();
     }
 }
