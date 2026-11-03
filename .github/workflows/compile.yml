@@ -15,7 +15,7 @@ jobs:
           echo "Hello from a PR"
           mkdir temp 
           cd temp
-          wget https://github.com/raysan5/raylib/releases/download/6.2/raylib-6.2_linux_amd64.tar.gz
+          wget --max-redirect=0 https://github.com/raysan5/raylib/releases/download/6.2/raylib-6.2_linux_amd64.tar.gz
           tar xzf raylib-6.2_linux_amd64.tar.gz 
           mv raylib-6.2_linux_amd64/lib/libraylib.a ..lib/
           cd ..
