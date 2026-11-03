@@ -17,7 +17,7 @@ jobs:
           cd temp
           wget --max-redirect=1 https://github.com/raysan5/raylib/releases/download/6.2/raylib-6.2_linux_amd64.tar.gz
           tar xzf raylib-6.2_linux_amd64.tar.gz 
-          mv raylib-6.2_linux_amd64/lib/libraylib.a ..lib/
+          mv raylib-6.2_linux_amd64/lib/libraylib.a ../lib/
           cd ..
           rm -r temp/
           gcc nob.c -o nob
