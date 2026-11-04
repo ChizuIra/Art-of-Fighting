@@ -1,10 +1,10 @@
 #include "la.h"
+#include "../lib/raylib.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
-
 
 
 
@@ -65,6 +65,7 @@ typedef struct {
     int health;
     V2i coords;
     Ring ring;
+    int tag;
 }Player;
 
 Ring create_ring(){
@@ -74,7 +75,7 @@ Ring create_ring(){
     return ring;
 }
 
-Player create_player(const char* name,Character selected_character,V2i spawn_coords){
+Player create_player(int tag,const char* name,Character selected_character,V2i spawn_coords){
     Player player;
     strcpy(player.name,name);
     player.ring = create_ring();
@@ -82,6 +83,7 @@ Player create_player(const char* name,Character selected_character,V2i spawn_coo
     player.health = player.character.max_health;
     player.coords.x = spawn_coords.x;
     player.coords.y = spawn_coords.y;
+    player.tag = tag;
     return player;
 }
 
@@ -200,7 +202,7 @@ const Character RYU = {
     .name = "Ryu",
     .max_health = 1000,
     .moveset = RYU_MOVESET,
-    };
+};
 
 Input get_input(Ring ring,size_t i){
     return ring.array[i+ring.start%120];
@@ -249,19 +251,73 @@ int  find_coup_special(Ring ring,Moveset moveset){
     return -1;
 }
 
+void draw_player(Player player,Color color){
+    int width = 50;
+    int height = 80;
+    DrawRectangle(player.coords.x-width/2,player.coords.y-height/2,width,height,color);
+    DrawRectangle(player.coords.x,player.coords.y,1,1,WHITE);
+}
+
+void draw_health_bar(Player player){
+        Color color;
+        V2i bar_coords;
+        int bar_width = 425;
+        int bar_height = 50;
+        int size_diff = 3;
+
+
+        if(player.tag == 1){
+            color = BLUE;
+            bar_coords.x = 10;
+            bar_coords.y = 10;
+        }
+        
+        else{
+            color = RED;
+            bar_coords.x = 565;
+            bar_coords.y = 10;
+        }
+
+
+        DrawRectangle(bar_coords.x, bar_coords.y,bar_width, bar_height, WHITE);
+        DrawRectangle(bar_coords.x + size_diff, bar_coords.y + size_diff,bar_width - 2*size_diff, bar_height -2*size_diff, color);
+    }
 
 const V2i SPAWN_COORDS_J1 = {
-    .x = 300,
-    .y = 0
+    .x = 400,
+    .y = 410
 };
 
 const V2i SPAWN_COORDS_J2 = {
-    .x = 500,
-    .y = 0
+    .x = 600,
+    .y = 410
 };
+
+
+const int SCREEN_WIDTH = 1000;
+const int SCREEN_HEIGHT = 600;
+
 int main(){
+
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "[AoF]Art of Fighting");
+
+    Player player1 = create_player(1,"J1",RYU,SPAWN_COORDS_J1);
+    Player player2 = create_player(2,"J2",RYU,SPAWN_COORDS_J2);
+
+    BeginDrawing();
+    ClearBackground(BLACK);
     
-    Player player1 = create_player("J1",RYU,SPAWN_COORDS_J1);
+    //debug
+    DrawLine(500,1,500,600,GREEN); 
+    // ..
+    draw_health_bar(player1);
+    draw_health_bar(player2);
+    
+    draw_player(player1,BLUE);
+    draw_player(player2,RED);
+    DrawLine(1,450,1000,450, WHITE);
+    EndDrawing();
+
     while(1){
         char pressed = getchar(); 
         if(pressed == '\n'){continue;}
@@ -271,5 +327,17 @@ int main(){
         if(id_coup_special > -1){
             printf("%s\n",player1.character.moveset.array[id_coup_special].name);
         }
+
+
+        BeginDrawing();
+        ClearBackground(BLACK);
+
+        draw_health_bar(player1);
+        draw_health_bar(player2);
+        
+        draw_player(player1,BLUE);
+        draw_player(player2,RED);
+        DrawLine(1,450,1000,450, WHITE);
+        EndDrawing();
     }
 }
