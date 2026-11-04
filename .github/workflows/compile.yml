@@ -10,12 +10,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - uses: openrndr/setup-opengl@v1.1
-      - run: xvfb-run glxinfo
+      
+      - name: DL openGL
+        run: |
+          echo "DL openGL"
 
       - name: DL libraylib
         run: |
-          echo "Hello from a PR"
+          echo "DL libraylib"
           mkdir temp 
           cd temp
           wget --max-redirect=1 https://github.com/raysan5/raylib/releases/download/6.2/raylib-6.2_linux_amd64.tar.gz
@@ -26,5 +28,6 @@ jobs:
           
       - name: Test compile
         run: |
+          echo "compile"
           gcc nob.c -o nob
           ./nob
