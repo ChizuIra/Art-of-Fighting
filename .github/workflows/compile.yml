@@ -10,7 +10,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run shell command
+      - uses: openrndr/setup-opengl@v1.1
+      - run: xvfb-run glxinfo
+
+      - name: DL libraylib
         run: |
           echo "Hello from a PR"
           mkdir temp 
@@ -20,5 +23,8 @@ jobs:
           mv raylib-6.2_linux_amd64/lib/libraylib.a ../lib/
           cd ..
           rm -r temp/
+          
+      - name: Test compile
+        run: |
           gcc nob.c -o nob
           ./nob
