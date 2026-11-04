@@ -14,6 +14,9 @@ jobs:
       - name: DL openGL
         run: |
           echo "DL openGL"
+      
+          sudo apt update
+          sudo apt install build-essential cmake pkg-config mesa-utils libgl1-mesa-dev libglu1-mesa-dev
 
       - name: DL libraylib
         run: |
