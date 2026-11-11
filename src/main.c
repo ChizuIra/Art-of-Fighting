@@ -1,5 +1,9 @@
+
+#define LIGHT_BLUE       CLITERAL(Color){ 216,236,255,258 }    
+#define LIGHT_RED        CLITERAL(Color){ 247,123,131,1 }      
+
 #include "la.h"
-#include "../lib/raylib.h"
+#include "raylib.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,6 +16,16 @@ const int SCREEN_WIDTH = 1000;
 const int SCREEN_HEIGHT = 600;
 const int MID_SCREEN_WIDTH = SCREEN_WIDTH/2;
 const int GROUND = SCREEN_HEIGHT - (20 * SCREEN_WIDTH)/100;
+const int BAR_WIDTH = (40*SCREEN_WIDTH)/100;
+const int BAR_HEIGHT = 50;
+
+typedef struct{
+Color base_color;
+Color damaged_color;
+int tag;
+V2i coords;
+}Health_Bar;
+
 
 typedef enum{
 NEUTRE = 5,
@@ -78,6 +92,23 @@ Ring ring;
 ring.start = 0;
 ring.end = 0;
 return ring;
+}
+
+Health_Bar create_health_bar(int tag , Color base_color , Color damaged_color){
+    Health_Bar health_bar;
+    health_bar.tag = tag;
+    health_bar.base_color = base_color;
+    health_bar.damaged_color = damaged_color;
+
+    const int MARGIN = 10;
+    if(tag == 1){
+        health_bar.coords.x = MARGIN;
+        health_bar.coords.y = MARGIN;
+    }else{
+        health_bar.coords.x = SCREEN_WIDTH - MARGIN - BAR_WIDTH;
+        health_bar.coords.y = MARGIN;
+    }
+    return health_bar;
 }
 
 Player create_player(int tag,const char* name,Character selected_character,V2i spawn_coords){
@@ -263,30 +294,11 @@ DrawRectangle(player.coords.x-width/2,player.coords.y-height/2,width,height,colo
 DrawRectangle(player.coords.x,player.coords.y,1,1,WHITE);
 }
 
-void draw_health_bar(Player player){
-    Color color;
-    V2i bar_coords;
-    const int BAR_WIDTH = 425;
-    const int BAR_HEIGHT = 50;
-    const int SIZE_DIFF = 3;
-    const int MARGIN = 10;
-    const int MID_PART  = 65;
+void draw_health_bar(Player player, Health_Bar health_bar){
+    const int PADDING = 3;
 
-    if(player.tag == 1){
-        color = BLUE;
-        bar_coords.x = MARGIN;
-        bar_coords.y = MARGIN;
-    }
-    
-    else{
-        color = RED;
-        bar_coords.x = SCREEN_WIDTH - MARGIN - BAR_WIDTH;
-        bar_coords.y = MARGIN;
-    }
-
-
-    DrawRectangle(bar_coords.x, bar_coords.y,BAR_WIDTH, BAR_HEIGHT, WHITE);
-    DrawRectangle(bar_coords.x + SIZE_DIFF, bar_coords.y + SIZE_DIFF,BAR_WIDTH - 2*SIZE_DIFF, BAR_HEIGHT -2*SIZE_DIFF, color);
+    DrawRectangle(health_bar.coords.x, health_bar.coords.y,BAR_WIDTH, BAR_HEIGHT, WHITE);
+    DrawRectangle(health_bar.coords.x + PADDING, health_bar.coords.y + PADDING,BAR_WIDTH - 2*PADDING, BAR_HEIGHT -2*PADDING, health_bar.base_color);
 }
 
 const int BASE_DISTANCE_BETWEEN_PLAYER = 100;
@@ -300,23 +312,20 @@ const V2i SPAWN_COORDS_J2 = {
 .y = GROUND - 40
 };
 
+
 int main(){
-
-InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "[AoF]Art of Fighting");
-
-Player player1 = create_player(1,"J1",RYU,SPAWN_COORDS_J1);
-Player player2 = create_player(2,"J2",RYU,SPAWN_COORDS_J2);
-
-BeginDrawing();
-ClearBackground(BLACK);
-
-//debug
-DrawLine(MID_SCREEN_WIDTH,1,MID_SCREEN_WIDTH,SCREEN_HEIGHT,GREEN); 
-// ..
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "[AoF]Art of Fighting");
+    Player player1 = create_player(1,"J1",RYU,SPAWN_COORDS_J1);
+    Player player2 = create_player(2,"J2",RYU,SPAWN_COORDS_J2);
+    Health_Bar health_bar1 = create_health_bar(player1.tag,BLUE,LIGHT_BLUE);
+    Health_Bar health_bar2 = create_health_bar(player2.tag,RED,LIGHT_RED);
 
 
-    draw_health_bar(player1);
-    draw_health_bar(player2);
+    BeginDrawing();
+    ClearBackground(BLACK);
+
+    draw_health_bar(player1,health_bar1);
+    draw_health_bar(player2,health_bar2);
     
     draw_player(player1,BLUE);
     draw_player(player2,RED);
@@ -337,8 +346,8 @@ DrawLine(MID_SCREEN_WIDTH,1,MID_SCREEN_WIDTH,SCREEN_HEIGHT,GREEN);
         BeginDrawing();
         ClearBackground(BLACK);
 
-        draw_health_bar(player1);
-        draw_health_bar(player2);
+        draw_health_bar(player1,health_bar1);
+        draw_health_bar(player2,health_bar2);
         
         draw_player(player1,BLUE);
         draw_player(player2,RED);
