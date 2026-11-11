@@ -31,6 +31,7 @@ int main(int argc, char **argv){
         nob_cc_inputs(&cmd, LIB_FOLDER "la.h");
         if (!nob_cmd_run(&cmd)) return 1;
     }
+    
 
     // nob.h ships with a bunch of nob_cc_* macros that try abstract away the specific compiler.
     // They are verify basic and not particularly flexible, but you can redefine them if you need to
@@ -43,7 +44,9 @@ int main(int argc, char **argv){
     nob_cmd_append(&cmd, "-I", BUILD_FOLDER, "-I", LIB_FOLDER);
     nob_cc_output(&cmd, BUILD_FOLDER "main");
     nob_cc_inputs(&cmd, SRC_FOLDER "main.c");
+    nob_cmd_append(&cmd,LIB_FOLDER "libraylib.a", "-lGL" ,"-lm", "-lpthread", "-ldl","-lrt","-lX11");
     if (!nob_cmd_run(&cmd)) return 1;
+// -lGL -lm -lpthread -ldl -lrt -lX11
 
     return 0;
 

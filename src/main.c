@@ -1,4 +1,9 @@
+
+#define LIGHT_BLUE       CLITERAL(Color){ 216,236,255,258 }    
+#define LIGHT_RED        CLITERAL(Color){ 247,123,131,1 }      
+
 #include "la.h"
+#include "raylib.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,6 +11,20 @@
 #include <string.h>
 
 
+
+const int SCREEN_WIDTH = 1000;
+const int SCREEN_HEIGHT = 600;
+const int MID_SCREEN_WIDTH = SCREEN_WIDTH/2;
+const int GROUND = SCREEN_HEIGHT - (20 * SCREEN_WIDTH)/100;
+const int BAR_WIDTH = (40*SCREEN_WIDTH)/100;
+const int BAR_HEIGHT = 50;
+
+typedef struct{
+    Color base_color;
+    Color damaged_color;
+    int tag;
+    V2i coords;
+}Health_Bar;
 
 
 typedef enum{
@@ -65,6 +84,7 @@ typedef struct {
     int health;
     V2i coords;
     Ring ring;
+    int tag;
 }Player;
 
 Ring create_ring(){
@@ -74,7 +94,24 @@ Ring create_ring(){
     return ring;
 }
 
-Player create_player(const char* name,Character selected_character,V2i spawn_coords){
+Health_Bar create_health_bar(int tag , Color base_color , Color damaged_color){
+    Health_Bar health_bar;
+    health_bar.tag = tag;
+    health_bar.base_color = base_color;
+    health_bar.damaged_color = damaged_color;
+
+    const int MARGIN = 10;
+    if(tag == 1){
+        health_bar.coords.x = MARGIN;
+        health_bar.coords.y = MARGIN;
+    }else{
+        health_bar.coords.x = SCREEN_WIDTH - MARGIN - BAR_WIDTH;
+        health_bar.coords.y = MARGIN;
+    }
+    return health_bar;
+}
+
+Player create_player(int tag,const char* name,Character selected_character,V2i spawn_coords){
     Player player;
     strcpy(player.name,name);
     player.ring = create_ring();
@@ -82,6 +119,7 @@ Player create_player(const char* name,Character selected_character,V2i spawn_coo
     player.health = player.character.max_health;
     player.coords.x = spawn_coords.x;
     player.coords.y = spawn_coords.y;
+    player.tag = tag;
     return player;
 }
 
@@ -200,7 +238,7 @@ const Character RYU = {
     .name = "Ryu",
     .max_health = 1000,
     .moveset = RYU_MOVESET,
-    };
+};
 
 Input get_input(Ring ring,size_t i){
     return ring.array[i+ring.start%120];
@@ -249,19 +287,51 @@ int  find_coup_special(Ring ring,Moveset moveset){
     return -1;
 }
 
+void draw_player(Player player,Color color){
+    int width = 50;
+    int height = 80;
+    DrawRectangle(player.coords.x-width/2,player.coords.y-height/2,width,height,color);
+    DrawRectangle(player.coords.x,player.coords.y,1,1,WHITE);
+}
 
+void draw_health_bar(Player player, Health_Bar health_bar){
+    const int PADDING = 3;
+
+    DrawRectangle(health_bar.coords.x, health_bar.coords.y,BAR_WIDTH, BAR_HEIGHT, WHITE);
+    DrawRectangle(health_bar.coords.x + PADDING, health_bar.coords.y + PADDING,BAR_WIDTH - 2*PADDING, BAR_HEIGHT -2*PADDING, health_bar.base_color);
+}
+
+const int BASE_DISTANCE_BETWEEN_PLAYER = 100;
 const V2i SPAWN_COORDS_J1 = {
-    .x = 300,
-    .y = 0
+    .x = MID_SCREEN_WIDTH - BASE_DISTANCE_BETWEEN_PLAYER,
+    .y = GROUND - 40
 };
 
 const V2i SPAWN_COORDS_J2 = {
-    .x = 500,
-    .y = 0
+    .x =  MID_SCREEN_WIDTH + BASE_DISTANCE_BETWEEN_PLAYER,
+    .y = GROUND - 40
 };
+
+
 int main(){
-    
-    Player player1 = create_player("J1",RYU,SPAWN_COORDS_J1);
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "[AoF]Art of Fighting");
+    Player player1 = create_player(1,"J1",RYU,SPAWN_COORDS_J1);
+    Player player2 = create_player(2,"J2",RYU,SPAWN_COORDS_J2);
+    Health_Bar health_bar1 = create_health_bar(player1.tag,BLUE,LIGHT_BLUE);
+    Health_Bar health_bar2 = create_health_bar(player2.tag,RED,LIGHT_RED);
+
+
+    BeginDrawing();
+    ClearBackground(BLACK);
+
+    draw_health_bar(player1,health_bar1);
+    draw_health_bar(player2,health_bar2);
+
+    draw_player(player1,BLUE);
+    draw_player(player2,RED);
+    DrawLine(1,GROUND,SCREEN_WIDTH, GROUND, WHITE);
+    EndDrawing();
+
     while(1){
         char pressed = getchar(); 
         if(pressed == '\n'){continue;}
@@ -271,5 +341,17 @@ int main(){
         if(id_coup_special > -1){
             printf("%s\n",player1.character.moveset.array[id_coup_special].name);
         }
+
+
+        BeginDrawing();
+        ClearBackground(BLACK);
+
+        draw_health_bar(player1,health_bar1);
+        draw_health_bar(player2,health_bar2);
+
+        draw_player(player1,BLUE);
+        draw_player(player2,RED);
+        DrawLine(1,GROUND,SCREEN_WIDTH,GROUND, WHITE);
+        EndDrawing();
     }
 }
