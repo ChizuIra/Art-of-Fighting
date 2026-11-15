@@ -292,10 +292,10 @@ int  find_coup_special(Ring ring,Moveset moveset){
     return -1;
 }
 
+const int PLAYER_WIDTH = 50; 
+const int PLAYER_HEIGHT = 80;
 void draw_player(Player player,Color color){
-    int width = 50;
-    int height = 80;
-    DrawRectangle(player.coords.x-width/2,player.coords.y-height/2,width,height,color);
+    DrawRectangle(player.coords.x-PLAYER_WIDTH/2,player.coords.y-PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT,color);
     DrawRectangle(player.coords.x,player.coords.y,1,1,WHITE);
 }
 
@@ -309,12 +309,12 @@ void draw_health_bar(Health_Bar health_bar){
 const int BASE_DISTANCE_BETWEEN_PLAYER = 100;
 const V2i SPAWN_COORDS_J1 = {
     .x = MID_SCREEN_WIDTH - BASE_DISTANCE_BETWEEN_PLAYER,
-    .y = GROUND - 40
+    .y = GROUND - PLAYER_HEIGHT/2
 };
 
 const V2i SPAWN_COORDS_J2 = {
     .x =  MID_SCREEN_WIDTH + BASE_DISTANCE_BETWEEN_PLAYER,
-    .y = GROUND - 40
+    .y = GROUND - PLAYER_HEIGHT/2
 };
 
 
