@@ -1,16 +1,13 @@
-
-#define LIGHT_BLUE       CLITERAL(Color){ 216,236,255,258 }    
-#define LIGHT_RED        CLITERAL(Color){ 247,123,131,1 }      
-
 #include "la.h"
 #include "raylib.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
 
 
+#define LIGHT_BLUE       CLITERAL(Color){ 216,236,255,258 }    
+#define LIGHT_RED        CLITERAL(Color){ 247,123,131,1 }      
 
 const int SCREEN_WIDTH = 1000;
 const int SCREEN_HEIGHT = 600;
