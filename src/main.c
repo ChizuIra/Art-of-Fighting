@@ -26,7 +26,7 @@ typedef struct{
     Color damaged_color;
     Tag tag;
     V2i coords;
-}Health_Bar;
+}HealthBar;
 
 
 typedef enum{
@@ -96,8 +96,8 @@ Ring create_ring(){
     return ring;
 }
 
-Health_Bar create_health_bar(Player player){
-    Health_Bar health_bar;
+HealthBar create_health_bar(Player player){
+    HealthBar health_bar;
     health_bar.tag = player.tag;
 
     const int MARGIN = 10;
@@ -299,7 +299,7 @@ void draw_player(Player player,Color color){
     DrawRectangle(player.coords.x,player.coords.y,1,1,WHITE);
 }
 
-void draw_health_bar(Health_Bar health_bar){
+void draw_health_bar(HealthBar health_bar){
     const int PADDING = 3;
 
     DrawRectangle(health_bar.coords.x, health_bar.coords.y,BAR_WIDTH, BAR_HEIGHT, WHITE);
@@ -322,8 +322,8 @@ int main(){
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "[AoF]Art of Fighting");
     Player player1 = create_player(J1,"J1",RYU,SPAWN_COORDS_J1);
     Player player2 = create_player(J2,"J2",RYU,SPAWN_COORDS_J2);
-    Health_Bar health_bar1 = create_health_bar(player1);
-    Health_Bar health_bar2 = create_health_bar(player2);
+    HealthBar health_bar1 = create_health_bar(player1);
+    HealthBar health_bar2 = create_health_bar(player2);
 
 
     BeginDrawing();
