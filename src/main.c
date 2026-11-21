@@ -157,7 +157,7 @@ void add_input(Ring *ring,Input input){
 
 const Input NO_INPUT= {.direction = NEUTRE,.coup=NONE};
 
-Input get_pressed_input(char pressed){
+Input get_pressed_input(int pressed){
     switch(pressed){
         case '1':
             return create_input(BASG,NONE);
@@ -325,38 +325,31 @@ int main(){
     HealthBar health_bar1 = create_health_bar(player1);
     HealthBar health_bar2 = create_health_bar(player2);
 
+    //SetTargetFPS(60);  
 
-    BeginDrawing();
-    ClearBackground(BLACK);
-
-    draw_health_bar(health_bar1);
-    draw_health_bar(health_bar2);
-
-    draw_player(player1,BLUE);
-    draw_player(player2,RED);
-    DrawLine(1,GROUND,SCREEN_WIDTH, GROUND, WHITE);
-    EndDrawing();
-
-    while(1){
-        char pressed = getchar(); 
-        if(pressed == '\n'){continue;}
-        Input input = get_pressed_input(pressed);
-        add_input(&player1.ring,input);
-        int id_coup_special = find_coup_special(player1.ring,player1.character.moveset);
-        if(id_coup_special > -1){
-            printf("%s\n",player1.character.moveset.array[id_coup_special].name);
-        }
-
+    while(!WindowShouldClose()){
+        int key_pressed = GetKeyPressed();
+        printf("%d",key_pressed);
+        
+        // Input input = get_pressed_input(PRESSED);
+        // add_input(&player1.ring,input);
+        // int id_coup_special = find_coup_special(player1.ring,player1.character.moveset);
+        // if(id_coup_special > -1){
+        //    printf("%s\n",player1.character.moveset.array[id_coup_special].name);
+        // }
+        
 
         BeginDrawing();
         ClearBackground(BLACK);
 
         draw_health_bar(health_bar1);
         draw_health_bar(health_bar2);
-
+        
         draw_player(player1,BLUE);
         draw_player(player2,RED);
         DrawLine(1,GROUND,SCREEN_WIDTH,GROUND, WHITE);
         EndDrawing();
     }
+    CloseWindow();  
+    return 0;
 }
